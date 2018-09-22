@@ -1,7 +1,6 @@
 package com.example.lindenspc.customalarmmanager;
 
 
-
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
