@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:text="Time"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/NotificationTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="222dp"
+        android:text="Notification Test"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/edittext_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/edittext_message"
+        android:layout_centerHorizontal="true"
+        android:hint="Notification Title" />
+
+    <EditText
+        android:id="@+id/edittext_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button_channel01"
+        android:layout_centerHorizontal="true"
+        android:hint="Notification Message" />
+
+    <Button
+        android:id="@+id/button_channel01"
+        android:layout_width="257dp"
+        android:layout_height="37dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="71dp"
+        android:text="Notification Ch 01 Test" />
+
+
+    <Button
+        android:id="@+id/button_channel02"
+        android:layout_width="257dp"
+        android:layout_height="38dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="13dp"
+        android:text="Notification Ch 02 Test" />
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/button2"
+        android:layout_marginTop="139dp"
+        android:text="Set Time"
+        android:layout_alignLeft="@+id/button2" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="64dp"
+        android:text="Set Date"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="27dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button2"
+        android:layout_alignStart="@+id/textView"
+        android:text="Date"
+        android:textSize="20sp"
+        android:layout_alignLeft="@+id/textView" />
+
+    <TextView
+        android:id="@+id/TimeSetText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:textSize="20sp"
+        android:text="No Alarm Set" />
+
+    <Button
+        android:id="@+id/button_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="202dp"
+        android:text="Delete Alarm" />
+
+
+</RelativeLayout>
