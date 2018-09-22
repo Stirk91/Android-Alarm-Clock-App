@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
     private EditText editTextTitle;
     private EditText editTextMessage;
-    private Button buttonChannel1;
-    private Button buttonChannel2;
+    private Button buttonChannel01;
+    private Button buttonChannel02;
 
     private NotificationManagerCompat notificationManager;
 
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        TextView textView = (TextView) findViewById(R.id.textView);
+        TextView textView = findViewById(R.id.textView);
         textView.setText("Hour: " + hourOfDay + " Minute: " + minute);
 
         Calendar calendar = Calendar.getInstance();
@@ -110,10 +110,10 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         setContentView(R.layout.activity_main);
 
         // Notification
-        editTextTitle = findViewById(R.id.edittext_title);
-        editTextMessage = findViewById(R.id.edittext_message);
-        buttonChannel1 = findViewById(R.id.button_channel01);
-        buttonChannel2 = findViewById(R.id.button_channel02);
+        editTextTitle = findViewById(R.id.edit_text_title);
+        editTextMessage = findViewById(R.id.edit_text_message);
+        buttonChannel01 = findViewById(R.id.button_channel01);
+        buttonChannel02 = findViewById(R.id.button_channel02);
 
         notificationManager = NotificationManagerCompat.from(this);
 
@@ -130,14 +130,14 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         });
 
 
-        buttonChannel1.setOnClickListener(new View.OnClickListener() {
+        buttonChannel01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendOnChannel1(editTextTitle.getText().toString(), editTextMessage.getText().toString());
             }
         });
 
-        buttonChannel2.setOnClickListener(new View.OnClickListener() {
+        buttonChannel02.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendOnChannel2(editTextTitle.getText().toString(), editTextMessage.getText().toString());            }
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
 
         // Date Picker
-        Button button2 = (Button) findViewById(R.id.button2);
+        Button button2 = findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
 
         // Time Picker
-        Button button = (Button) findViewById(R.id.button);
+        Button button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
