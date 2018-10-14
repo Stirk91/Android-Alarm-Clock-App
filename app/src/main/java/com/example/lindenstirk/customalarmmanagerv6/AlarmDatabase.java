@@ -43,9 +43,9 @@ public abstract class AlarmDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            alarmDao.insert(new Alarm("Title 1", "Description 1", 1));
-            alarmDao.insert(new Alarm("Title 2", "Description 2", 2));
-            alarmDao.insert(new Alarm("Title 3", "Description 3", 3));
+            alarmDao.insert(new Alarm("Title 1", "Description 1", "1"));
+            alarmDao.insert(new Alarm("Title 2", "Description 2", "2"));
+            alarmDao.insert(new Alarm("Title 3", "Description 3", "3"));
             return null;
         }
     }

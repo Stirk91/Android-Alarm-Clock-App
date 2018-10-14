@@ -13,9 +13,9 @@ public class Alarm {
 
     private String description;
 
-    private int priority;
+    private String priority;
 
-    public Alarm(String title, String description, int priority) {
+    public Alarm(String title, String description, String priority) {
         this.title = title;
         this.description = description;
         this.priority = priority;
@@ -37,7 +37,7 @@ public class Alarm {
         return description;
     }
 
-    public int getPriority() {
+    public String getPriority() {
         return priority;
     }
 }
