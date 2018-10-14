@@ -12,7 +12,10 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
-public class AddAlarmActivity extends AppCompatActivity {
+public class AddEditAlarmActivity extends AppCompatActivity {
+    public static final String EXTRA_ID =
+            "com.example.lindenstirk.customalarmmanagerv6.EXTRA_ID";
+
     public static final String EXTRA_TITLE =
             "com.example.lindenstirk.customalarmmanagerv6.EXTRA_TITLE";
 
@@ -36,7 +39,19 @@ public class AddAlarmActivity extends AppCompatActivity {
         textViewDate = findViewById(R.id.text_view_date);
 
         getSupportActionBar().setHomeAsUpIndicator((R.drawable.ic_close));
-        setTitle("Add Note");
+
+        Intent intent = getIntent();
+
+        // if there's no EXTRA ID then it's the first time, thus you're adding an alarm
+        if (intent.hasExtra(EXTRA_ID)) {
+            setTitle("Edit Alarm");
+            editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE));
+            textViewTime.setText(intent.getStringExtra(EXTRA_TIME));
+            textViewDate.setText(intent.getStringExtra(EXTRA_DATE));
+        }
+        else {
+            setTitle("Add Note");
+        }
     }
 
     private void saveAlarm() {
@@ -53,6 +68,13 @@ public class AddAlarmActivity extends AppCompatActivity {
         data.putExtra(EXTRA_TITLE, title);
         data.putExtra(EXTRA_TIME, time);
         data.putExtra(EXTRA_DATE, date);
+
+        int id = getIntent().getIntExtra(EXTRA_ID, -1);
+
+        // only updates id if not -1
+        if (id != -1) {
+            data.putExtra(EXTRA_ID, id);
+        }
 
         setResult(RESULT_OK, data);
         finish();
