@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context="com.example.lindenstirk.customalarmmanagerv6.AddAlarmActivity">
+    tools:context="com.example.lindenstirk.customalarmmanagerv6.AddEditAlarmActivity">
 
 
 
@@ -28,5 +28,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="date"/>
+
+    <Button
+        android:id="@+id/button_set_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Set Time" />
+
+    <Button
+        android:id="@+id/button_set_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Set Date" />
 
 </LinearLayout>

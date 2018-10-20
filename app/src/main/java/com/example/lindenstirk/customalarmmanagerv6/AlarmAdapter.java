@@ -13,6 +13,7 @@ import java.util.List;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder> {
     private List<Alarm> alarms = new ArrayList<>();
+    private OnAlarmClickListener listener;
 
     @NonNull
     @Override
@@ -40,6 +41,11 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
         notifyDataSetChanged();
     }
 
+    public Alarm getNoteAt(int index) {
+        return alarms.get(index);
+    }
+
+
     class AlarmHolder extends RecyclerView.ViewHolder {
         private TextView textViewTitle;
         private TextView textViewDescription;
@@ -50,6 +56,27 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
             textViewTitle = itemView.findViewById(R.id.text_view_title);
             textViewDescription = itemView.findViewById(R.id.text_view_description);
             textViewPriority = itemView.findViewById(R.id.text_view_priority);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int index = getAdapterPosition();
+                    // checks to make sure index exists
+                    if (listener != null && index != RecyclerView.NO_POSITION) {
+                        listener.onAlarmClick(alarms.get(index));
+                    }
+                }
+            });
         }
     }
+
+    public interface OnAlarmClickListener {
+        void onAlarmClick(Alarm alarm);
+    }
+
+    public void setOnAlarmClickListner(OnAlarmClickListener listner) {
+        this.listener = listner;
+    }
+
+
 }

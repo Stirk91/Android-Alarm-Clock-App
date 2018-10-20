@@ -1,18 +1,28 @@
 package com.example.lindenstirk.customalarmmanagerv6;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
-public class AddEditAlarmActivity extends AppCompatActivity {
+import java.text.DateFormat;
+import java.util.Calendar;
+
+public class AddEditAlarmActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
     public static final String EXTRA_ID =
             "com.example.lindenstirk.customalarmmanagerv6.EXTRA_ID";
 
@@ -52,7 +62,45 @@ public class AddEditAlarmActivity extends AppCompatActivity {
         else {
             setTitle("Add Note");
         }
+
+
+
+
+
+
+
+        // Time Picker Fragment
+        Button buttonSetTime = findViewById(R.id.button_set_time);
+        buttonSetTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment timePicker = new TimePickerFragment();
+                timePicker.show(getSupportFragmentManager(), "time picker");
+            }
+        });
+
+
+        // Date Picker Fragment
+        Button buttonSetDate = findViewById(R.id.button_set_date);
+        buttonSetDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+            }
+        });
+
     }
+
+
+
+
+
+
+
+
+
+
 
     private void saveAlarm() {
         String title = editTextTitle.getText().toString();
@@ -101,4 +149,31 @@ public class AddEditAlarmActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String currentDate = DateFormat.getDateInstance().format(calendar.getTime());
+        TextView textView = findViewById(R.id.text_view_date);
+        textView.setText(currentDate);
+    }
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        TextView textView = findViewById(R.id.text_view_time);
+        textView.setText("Time:" + hourOfDay + ":" + minute);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+
+       // updateTimeText(calendar);
+       // startAlarm(calendar);
+    }
+
+
 }
