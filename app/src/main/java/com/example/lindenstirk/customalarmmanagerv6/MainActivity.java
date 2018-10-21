@@ -73,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, AddEditAlarmActivity.class);
                 intent.putExtra(AddEditAlarmActivity.EXTRA_ID, alarm.getId());
                 intent.putExtra(AddEditAlarmActivity.EXTRA_TITLE, alarm.getTitle());
-                intent.putExtra(AddEditAlarmActivity.EXTRA_TIME, alarm.getDescription());
-                intent.putExtra(AddEditAlarmActivity.EXTRA_DATE, alarm.getPriority());
+                intent.putExtra(AddEditAlarmActivity.EXTRA_TIME, alarm.getTime());
+                intent.putExtra(AddEditAlarmActivity.EXTRA_DATE, alarm.getDate());
                 startActivityForResult(intent, EDIT_ALARM_REQUEST);
             }
         });

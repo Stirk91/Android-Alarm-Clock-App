@@ -27,8 +27,8 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
     public void onBindViewHolder(@NonNull AlarmHolder holder, int position) {
         Alarm currentAlarm = alarms.get(position);
         holder.textViewTitle.setText(currentAlarm.getTitle());
-        holder.textViewDescription.setText(currentAlarm.getDescription());
-        holder.textViewPriority.setText(String.valueOf(currentAlarm.getPriority()));
+        holder.textViewTime.setText(currentAlarm.getTime());
+        holder.textViewDate.setText(String.valueOf(currentAlarm.getDate()));
     }
 
     @Override
@@ -48,14 +48,14 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
 
     class AlarmHolder extends RecyclerView.ViewHolder {
         private TextView textViewTitle;
-        private TextView textViewDescription;
-        private TextView textViewPriority;
+        private TextView textViewTime;
+        private TextView textViewDate;
 
         public AlarmHolder(View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.text_view_title);
-            textViewDescription = itemView.findViewById(R.id.text_view_description);
-            textViewPriority = itemView.findViewById(R.id.text_view_priority);
+            textViewTime = itemView.findViewById(R.id.text_view_time);
+            textViewDate = itemView.findViewById(R.id.text_view_date);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -40,7 +40,13 @@
         android:id="@+id/button_set_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:text="Set Date" />
+
+    <Button
+        android:id="@+id/button_set_days"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Days" />
+
 
 </LinearLayout>

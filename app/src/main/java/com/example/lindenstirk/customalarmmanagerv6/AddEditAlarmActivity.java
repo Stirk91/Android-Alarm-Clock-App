@@ -1,8 +1,13 @@
 package com.example.lindenstirk.customalarmmanagerv6;
 
+import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -60,7 +65,7 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
             textViewDate.setText(intent.getStringExtra(EXTRA_DATE));
         }
         else {
-            setTitle("Add Note");
+            setTitle("Add Alarm");
         }
 
 
@@ -90,14 +95,10 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
             }
         });
 
+
+        // Day Picker Fragment
+        // TODO button for the user to select days of the week for a repeating alarm
     }
-
-
-
-
-
-
-
 
 
 
@@ -164,7 +165,18 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         TextView textView = findViewById(R.id.text_view_time);
-        textView.setText("Time:" + hourOfDay + ":" + minute);
+
+        // TODO need to format date correctly with leading zeros for 24-clock
+
+        // Makes sure there are two zeros if minute = 0
+        if (minute == 0) {
+            textView.setText(hourOfDay + ":" + minute + 0);
+        }
+        else {
+            textView.setText(hourOfDay + ":" + minute);
+        }
+
+
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -173,6 +185,20 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
 
        // updateTimeText(calendar);
        // startAlarm(calendar);
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void startAlarm(Calendar calendar){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        if (calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.DATE, 1); // if time has already passed
+        }
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 
 

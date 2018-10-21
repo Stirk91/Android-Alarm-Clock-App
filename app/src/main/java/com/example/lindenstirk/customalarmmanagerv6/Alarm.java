@@ -11,14 +11,14 @@ public class Alarm {
 
     private String title;
 
-    private String description;
+    private String time;
 
-    private String priority;
+    private String date;
 
-    public Alarm(String title, String description, String priority) {
+    public Alarm(String title, String time, String date) {
         this.title = title;
-        this.description = description;
-        this.priority = priority;
+        this.time = time;
+        this.date = date;
     }
 
     public void setId(int id) {
@@ -33,11 +33,11 @@ public class Alarm {
         return title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTime() {
+        return time;
     }
 
-    public String getPriority() {
-        return priority;
+    public String getDate() {
+        return date;
     }
 }
