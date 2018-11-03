@@ -22,8 +22,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.text.DateFormat;
 import java.util.Calendar;
 
@@ -127,6 +125,8 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
 
         setResult(RESULT_OK, data);
         finish();
+
+
     }
 
 
@@ -166,8 +166,6 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         TextView textView = findViewById(R.id.text_view_time);
 
-        // TODO need to format date correctly with leading zeros for 24-clock
-
         // Makes sure there are two zeros if minute = 0
         if (minute == 0) {
             textView.setText(hourOfDay + ":" + minute + 0);
@@ -184,22 +182,40 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         calendar.set(Calendar.SECOND, 0);
 
        // updateTimeText(calendar);
-       // startAlarm(calendar);
+        startAlarm(calendar);
     }
 
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void startAlarm(Calendar calendar){
+
+        // each pending intent needs a unique request id
+        // which is the id of the alarm in the database
+        int id = getIntent().getIntExtra(EXTRA_ID, -1);
+
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
 
         if (calendar.before(Calendar.getInstance())) {
             calendar.add(Calendar.DATE, 1); // if time has already passed
         }
 
+        // sends intent to alarm manager
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
+
+    private void cancelAlarm() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        alarmManager.cancel(pendingIntent);
+
+    }
+
+
+
 
 
 }
