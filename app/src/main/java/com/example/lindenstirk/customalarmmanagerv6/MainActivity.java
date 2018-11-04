@@ -1,13 +1,21 @@
 package com.example.lindenstirk.customalarmmanagerv6;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,9 +26,20 @@ import android.widget.Toast;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    // Notification Channels
+    public static final String CHANNEL_01_ID = "channel01";
+    public static final String CHANNEL_02_ID = "channel02";
+
+
     public static final int ADD_ALARM_REQUEST = 1;
     public static final int EDIT_ALARM_REQUEST = 2;
     private AlarmViewModel alarmViewModel;
+
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,14 +98,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
+        // Create Notification Channels
+        createNotificationChannels();
     }
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -127,4 +144,37 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
+    // Notifications
+
+    private void createNotificationChannels(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel01 = new NotificationChannel(
+                    CHANNEL_01_ID,
+                    "Channel 01",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel01.setDescription("This is Channel 01");
+
+            NotificationChannel channel02 = new NotificationChannel(
+                    CHANNEL_02_ID,
+                    "Channel 02",
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            channel02.setDescription("This is Channel 02");
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel01);
+            manager.createNotificationChannel(channel02);
+
+        }
+    }
+
+
+
+
+
+
+
 }

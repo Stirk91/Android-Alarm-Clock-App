@@ -8,11 +8,8 @@ public class Alarm {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-
     private String title;
-
     private String time;
-
     private String date;
 
     public Alarm(String title, String time, String date) {
@@ -37,7 +34,6 @@ public class Alarm {
         return time;
     }
 
-    public String getDate() {
-        return date;
-    }
+    public String getDate() { return date; }
+
 }

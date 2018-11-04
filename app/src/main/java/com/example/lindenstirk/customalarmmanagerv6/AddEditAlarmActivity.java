@@ -3,12 +3,19 @@ package com.example.lindenstirk.customalarmmanagerv6;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -38,9 +45,14 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
     public static final String EXTRA_DATE =
             "com.example.lindenstirk.customalarmmanagerv6.EXTRA_DATE";
 
+
     private EditText editTextTitle;
     private TextView textViewTime;
     private TextView textViewDate;
+
+    private Calendar calendar = Calendar.getInstance();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +62,8 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         editTextTitle = findViewById(R.id.edit_text_title);
         textViewTime = findViewById(R.id.text_view_time);
         textViewDate = findViewById(R.id.text_view_date);
+
+
 
         getSupportActionBar().setHomeAsUpIndicator((R.drawable.ic_close));
 
@@ -65,7 +79,6 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         else {
             setTitle("Add Alarm");
         }
-
 
 
 
@@ -96,6 +109,33 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
 
         // Day Picker Fragment
         // TODO button for the user to select days of the week for a repeating alarm
+
+
+
+        // Alarm On / Off
+        final Button alarmOn = findViewById(R.id.alarm_on);
+        final Button alarmOff = findViewById(R.id.alarm_off);
+
+        // Alarm On
+        alarmOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              alarmOn.setBackgroundColor(Color.CYAN);
+              alarmOff.setBackgroundColor(Color.WHITE);
+              startAlarm(calendar);
+            }
+        });
+
+        // Alarm Off
+        alarmOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alarmOn.setBackgroundColor(Color.WHITE);
+                alarmOff.setBackgroundColor(Color.CYAN);
+                cancelAlarm();
+            }
+        });
+
     }
 
 
@@ -166,17 +206,14 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         TextView textView = findViewById(R.id.text_view_time);
 
-        // Makes sure there are two zeros if minute = 0
-        if (minute == 0) {
-            textView.setText(hourOfDay + ":" + minute + 0);
+        // Makes sure there are two zeros if minute < 10
+        if (minute < 10) {
+            textView.setText(hourOfDay + ":" + 0 + minute);
         }
         else {
             textView.setText(hourOfDay + ":" + minute);
         }
 
-
-
-        Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
@@ -195,7 +232,7 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
         if (calendar.before(Calendar.getInstance())) {
             calendar.add(Calendar.DATE, 1); // if time has already passed
@@ -203,6 +240,8 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
 
         // sends intent to alarm manager
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+
     }
 
     private void cancelAlarm() {
@@ -218,4 +257,19 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
 
 
 
-}
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+

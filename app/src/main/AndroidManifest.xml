@@ -17,13 +17,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddEditAlarmActivity"
-            android:parentActivityName=".MainActivity"/>
-        
+        <activity android:name=".AddEditAlarmActivity" android:parentActivityName=".MainActivity"/>
+
+
         <receiver android:name=".AlarmReceiver" />
 
-        <service android:name=".RingtoneService"
-            android:enabled="true"></service>
+        <service android:name=".RingtoneService" android:enabled="true"></service>
 
     </application>
 

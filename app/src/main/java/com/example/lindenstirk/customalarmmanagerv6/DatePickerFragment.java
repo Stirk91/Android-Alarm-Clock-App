@@ -28,6 +28,6 @@ public class DatePickerFragment extends DialogFragment {
       //  calendar.set(Calendar.MONTH, month);
       //  calendar.set(Calendar.DAY_OF_MONTH, day);
 
-        return new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, (DatePickerDialog.OnDateSetListener)getActivity(), month, day, year);
+        return new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, (DatePickerDialog.OnDateSetListener)getActivity(), year, month, day);
     }
 }

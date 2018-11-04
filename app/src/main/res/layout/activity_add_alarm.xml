@@ -48,5 +48,19 @@
         android:layout_height="wrap_content"
         android:text="Set Days" />
 
+    <Button
+        android:id="@+id/alarm_on"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_bright"
+        android:text="On" />
+
+    <Button
+        android:id="@+id/alarm_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:text="Off" />
+
 
 </LinearLayout>
