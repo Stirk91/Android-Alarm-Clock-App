@@ -11,16 +11,20 @@ public class Alarm {
     private String title;
     private String time;
     private String date;
+    private int state;
 
     public Alarm(String title, String time, String date) {
         this.title = title;
         this.time = time;
         this.date = date;
+
     }
 
     public void setId(int id) {
         this.id = id;
     }
+
+    public void setState(int state) {this.state = state; }
 
     public int getId() {
         return id;
@@ -35,5 +39,8 @@ public class Alarm {
     }
 
     public String getDate() { return date; }
+
+    public int getState() { return state; }
+
 
 }

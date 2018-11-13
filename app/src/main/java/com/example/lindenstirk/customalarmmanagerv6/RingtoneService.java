@@ -8,6 +8,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -30,9 +31,10 @@ public class RingtoneService extends Service {
         public int onStartCommand(Intent intent, int flags, int startId) {
             //Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
+
             // creates instance of media player and starts the ringtone
             ringtone = MediaPlayer.create(this, R.raw.alarm_default);
-            ringtone.setLooping(true); // repeats forever
+            ringtone.setLooping(false); // repeats forever
             ringtone.start();
 
 

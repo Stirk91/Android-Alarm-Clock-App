@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.widget.Toast;
@@ -16,15 +18,25 @@ import android.widget.Toast;
 public class AlarmReceiver extends BroadcastReceiver {
 
 
+    public String alarmTitle;
 
 
     @Override
-    public void onReceive(Context context, Intent receivedIntent) {
+    public void onReceive(final Context context, Intent receivedIntent) {
+
+        alarmTitle = receivedIntent.getExtras().getString("alarm_title");
 
         showNotification(context);
 
-        Intent serviceIntent = new Intent(context, RingtoneService.class);
-        context.startService(serviceIntent);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                Intent serviceIntent = new Intent(context, RingtoneService.class);
+                context.startService(serviceIntent);
+            }
+        }, 60000);
+
+
 
 
     }
@@ -37,8 +49,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Notification notification = new NotificationCompat.Builder(context, MainActivity.CHANNEL_01_ID)
                 .setSmallIcon(R.drawable.n_icon_01)
-                .setContentTitle("Alarm")
-                .setContentText("is ringing")
+                .setContentTitle("Alarm: " + alarmTitle)
+                .setContentText("Alarm will sound in one minute")
                 .setContentIntent(contentIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
