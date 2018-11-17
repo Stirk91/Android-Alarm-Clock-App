@@ -3,19 +3,14 @@ package com.example.lindenstirk.customalarmmanagerv6;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -81,12 +76,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                alarmViewModel.delete(adapter.getNoteAt(viewHolder.getAdapterPosition()));
+                alarmViewModel.delete(adapter.getAlarmAt(viewHolder.getAdapterPosition()));
                 Toast.makeText(MainActivity.this, "Alarm deleted", Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(recyclerView);
 
-        adapter.setOnAlarmClickListner(new AlarmAdapter.OnAlarmClickListener() {
+        adapter.setOnAlarmClickListener(new AlarmAdapter.OnAlarmClickListener() {
             @Override
             public void onAlarmClick(Alarm alarm) {
                 Intent intent = new Intent(MainActivity.this, AddEditAlarmActivity.class);
@@ -94,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(AddEditAlarmActivity.EXTRA_TITLE, alarm.getTitle());
                 intent.putExtra(AddEditAlarmActivity.EXTRA_TIME, alarm.getTime());
                 intent.putExtra(AddEditAlarmActivity.EXTRA_DATE, alarm.getDate());
+                intent.putExtra(AddEditAlarmActivity.EXTRA_STATE, alarm.getState());
                 startActivityForResult(intent, EDIT_ALARM_REQUEST);
             }
         });
@@ -113,8 +109,9 @@ public class MainActivity extends AppCompatActivity {
             String title = data.getStringExtra(AddEditAlarmActivity.EXTRA_TITLE);
             String time = data.getStringExtra(AddEditAlarmActivity.EXTRA_TIME);
             String date = data.getStringExtra(AddEditAlarmActivity.EXTRA_DATE);
+            String state = data.getStringExtra(AddEditAlarmActivity.EXTRA_STATE);
 
-            Alarm alarm = new Alarm(title, time, date);
+            Alarm alarm = new Alarm(title, time, date, state);
             alarmViewModel.insert(alarm);
 
             Toast.makeText(this, "Alarm saved", Toast.LENGTH_SHORT).show();
@@ -131,8 +128,10 @@ public class MainActivity extends AppCompatActivity {
             String title = data.getStringExtra(AddEditAlarmActivity.EXTRA_TITLE);
             String time = data.getStringExtra(AddEditAlarmActivity.EXTRA_TIME);
             String date = data.getStringExtra(AddEditAlarmActivity.EXTRA_DATE);
+            String state = data.getStringExtra(AddEditAlarmActivity.EXTRA_STATE);
 
-            Alarm alarm = new Alarm(title, time, date);
+
+            Alarm alarm = new Alarm(title, time, date, state);
             alarm.setId(id);
             alarmViewModel.update(alarm);
 

@@ -15,17 +15,20 @@ import android.widget.Toast;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
+    public String alarmTitle;
 
 
 
     @Override
     public void onReceive(Context context, Intent receivedIntent) {
 
+        alarmTitle = receivedIntent.getExtras().getString("alarm_title");
+
+
         showNotification(context);
 
         Intent serviceIntent = new Intent(context, RingtoneService.class);
         context.startService(serviceIntent);
-
 
     }
 
@@ -37,7 +40,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Notification notification = new NotificationCompat.Builder(context, MainActivity.CHANNEL_01_ID)
                 .setSmallIcon(R.drawable.n_icon_01)
-                .setContentTitle("Alarm")
+                .setContentTitle("Alarm:" + alarmTitle)
                 .setContentText("is ringing")
                 .setContentIntent(contentIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

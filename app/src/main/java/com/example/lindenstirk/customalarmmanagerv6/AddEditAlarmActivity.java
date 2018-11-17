@@ -3,9 +3,6 @@ package com.example.lindenstirk.customalarmmanagerv6;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -13,9 +10,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -45,14 +39,19 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
     public static final String EXTRA_DATE =
             "com.example.lindenstirk.customalarmmanagerv6.EXTRA_DATE";
 
+    public static final String EXTRA_STATE =
+            "com.example.lindenstirk.customalarmmanagerv6.EXTRA_STATE";
+
 
     private EditText editTextTitle;
     private TextView textViewTime;
     private TextView textViewDate;
+    private TextView textViewState;
 
     private Calendar calendar = Calendar.getInstance();
-
-
+    public int id;
+    public String title;
+    public String state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +61,20 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         editTextTitle = findViewById(R.id.edit_text_title);
         textViewTime = findViewById(R.id.text_view_time);
         textViewDate = findViewById(R.id.text_view_date);
-
-
+        textViewState = findViewById(R.id.text_view_state);
 
         getSupportActionBar().setHomeAsUpIndicator((R.drawable.ic_close));
 
         Intent intent = getIntent();
+
+        state = intent.getStringExtra(EXTRA_STATE);
+
+
+        Toast.makeText(this, "State: " + state, Toast.LENGTH_SHORT).show();
+
+
+
+
 
         // if there's no EXTRA ID then it's the first time, thus you're adding an alarm
         if (intent.hasExtra(EXTRA_ID)) {
@@ -75,6 +82,9 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
             editTextTitle.setText(intent.getStringExtra(EXTRA_TITLE));
             textViewTime.setText(intent.getStringExtra(EXTRA_TIME));
             textViewDate.setText(intent.getStringExtra(EXTRA_DATE));
+
+            textViewState.setText(state);
+
         }
         else {
             setTitle("Add Alarm");
@@ -111,28 +121,41 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         // TODO button for the user to select days of the week for a repeating alarm
 
 
-
         // Alarm On / Off
-        final Button alarmOn = findViewById(R.id.alarm_on);
-        final Button alarmOff = findViewById(R.id.alarm_off);
+        final Button buttonAlarmOn = findViewById(R.id.alarm_on);
+        final Button buttonAlarmOff = findViewById(R.id.alarm_off);
+
+
+
+
+        if (state.equals("1")) {
+            alarmButtonOn(buttonAlarmOn, buttonAlarmOff);
+        }
+
+        else if (state.equals("0")) {
+            alarmButtonOff(buttonAlarmOn, buttonAlarmOff);
+        }
+
+        else {
+            Toast.makeText(this, "Alarm is neither on nor off. It is: " + state, Toast.LENGTH_SHORT).show();
+        }
+
+
+
 
         // Alarm On
-        alarmOn.setOnClickListener(new View.OnClickListener() {
+        buttonAlarmOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              alarmOn.setBackgroundColor(Color.CYAN);
-              alarmOff.setBackgroundColor(Color.WHITE);
-              startAlarm(calendar);
+            alarmOn(buttonAlarmOn, buttonAlarmOff);
             }
         });
 
         // Alarm Off
-        alarmOff.setOnClickListener(new View.OnClickListener() {
+        buttonAlarmOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarmOn.setBackgroundColor(Color.WHITE);
-                alarmOff.setBackgroundColor(Color.CYAN);
-                cancelAlarm();
+                alarmOff(buttonAlarmOn, buttonAlarmOff);
             }
         });
 
@@ -151,10 +174,17 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
             return;
         }
 
+        // TODO remove
+        Toast.makeText(this, "Saved State:" + state, Toast.LENGTH_LONG).show();
+
+
         Intent data = new Intent();
         data.putExtra(EXTRA_TITLE, title);
         data.putExtra(EXTRA_TIME, time);
         data.putExtra(EXTRA_DATE, date);
+        data.putExtra(EXTRA_STATE, state);
+
+
 
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
 
@@ -226,16 +256,21 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void startAlarm(Calendar calendar){
 
-        // each pending intent needs a unique request id
-        // which is the id of the alarm in the database
-        int id = getIntent().getIntExtra(EXTRA_ID, -1);
+        title = editTextTitle.getText().toString();
+
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        // Extra string into intent for alarm title
+        intent.putExtra("alarm_title", title);
+
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
 
         if (calendar.before(Calendar.getInstance())) {
             calendar.add(Calendar.DATE, 1); // if time has already passed
+            Toast.makeText(this, "The time or date has already passed", Toast.LENGTH_SHORT).show();
         }
 
         // sends intent to alarm manager
@@ -247,7 +282,7 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
     private void cancelAlarm() {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
 
         alarmManager.cancel(pendingIntent);
 
@@ -255,8 +290,35 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
 
 
 
+    private void alarmButtonOn(Button button_on, Button button_off) {
+        button_on.setBackgroundColor(Color.CYAN);
+        button_off.setBackgroundColor(Color.WHITE);
+        //startAlarm(calendar);
+        //state = "1";
+    }
 
+    private void alarmButtonOff(Button button_on, Button button_off) {
+        button_on.setBackgroundColor(Color.WHITE);
+        button_off.setBackgroundColor(Color.CYAN);
+        //cancelAlarm();
+        //state = "0";
+    }
 
+    private void alarmOn(Button button_on, Button button_off) {
+       // button_on.setBackgroundColor(Color.CYAN);
+       // button_off.setBackgroundColor(Color.WHITE);
+        alarmButtonOn(button_on, button_off);
+        startAlarm(calendar);
+        state = "1";
+    }
+
+    private void alarmOff(Button button_on, Button button_off) {
+       // button_on.setBackgroundColor(Color.WHITE);
+       // button_off.setBackgroundColor(Color.CYAN);
+        alarmButtonOff(button_on, button_off);
+        cancelAlarm();
+        state = "0";
+    }
 
 
 

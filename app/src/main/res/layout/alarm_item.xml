@@ -11,6 +11,37 @@
         android:layout_height="wrap_content"
         android:padding="8dp">
 
+        <ImageView
+            android:id="@+id/icon_ringing_black"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="2dp"
+            android:src="@drawable/ic_alarm_ringing_black" />
+
+
+        <ImageView
+            android:id="@+id/icon_ringing_red"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="2dp"
+            android:src="@drawable/ic_alarm_ringing_red" />
+
+        <ImageView
+            android:id="@+id/icon_set"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="2dp"
+            android:src="@drawable/ic_alarm_set" />
+
+        <ImageView
+            android:id="@+id/icon_off"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="2dp"
+            android:src="@drawable/ic_alarm_off" />
+
+
+
         <TextView
             android:id="@+id/text_view_time"
             android:layout_width="wrap_content"
@@ -27,6 +58,7 @@
             android:layout_toStartOf="@id/text_view_time"
             android:ellipsize="end"
             android:maxLines="1"
+            android:paddingLeft="60dp"
             android:text="title"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
@@ -35,6 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_title"
+            android:paddingLeft="60dp"
             android:text="date" />
 
         <TextView
