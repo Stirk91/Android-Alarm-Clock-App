@@ -43,7 +43,7 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
             "com.example.lindenstirk.customalarmmanagerv6.EXTRA_STATE";
 
     public static final String EXTRA_ALARM_TIME_IN_MILLIS =
-            "com.example.lindenstirk.customalarmmanagerv6.EXTRA_STATE";
+            "com.example.lindenstirk.customalarmmanagerv6.EXTRA_ALARM_TIME_IN_MILLIS";
 
 
     private EditText editTextTitle;
@@ -51,6 +51,7 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
     private TextView textViewDate;
     private TextView textViewState;
 
+    public Button buttonAlarmStop;
     public Calendar calendar = Calendar.getInstance();
     public String alarmTimeInMillis;
     public int id;
@@ -69,7 +70,7 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
 
         getSupportActionBar().setHomeAsUpIndicator((R.drawable.ic_close));
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
 
         // sets an 'off' state if the alarm is new
         if (!intent.hasExtra(EXTRA_STATE)) {
@@ -140,20 +141,25 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         // Alarm On / Off
         final Button buttonAlarmOn = findViewById(R.id.alarm_on);
         final Button buttonAlarmOff = findViewById(R.id.alarm_off);
+        buttonAlarmStop = findViewById(R.id.alarm_stop);
+
 
 
 
 
         if (state.equals("1")) {
             alarmButtonOn(buttonAlarmOn, buttonAlarmOff);
+            buttonAlarmStop.setVisibility(View.VISIBLE);
         }
 
         else if (state.equals("0")) {
             alarmButtonOff(buttonAlarmOn, buttonAlarmOff);
+            buttonAlarmStop.setVisibility(View.GONE);
         }
 
         else if (state.equals("2")) {
-
+            alarmButtonOn(buttonAlarmOn, buttonAlarmOff);
+            buttonAlarmStop.setVisibility(View.VISIBLE);
         }
 
         else {
@@ -179,6 +185,23 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
             }
         });
 
+
+        final Intent stopAlarmIntent = new Intent(this, AlarmReceiver.class);
+        stopAlarmIntent.putExtra("EXTRA_ON/OFF", "off");
+
+
+        buttonAlarmStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                state = "0";
+                textViewState.setText("State: " + state);
+
+                // stop ringtone
+                sendBroadcast(stopAlarmIntent);
+
+            }
+        });
+
     }
 
 
@@ -192,7 +215,7 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         alarmTimeInMillis = String.valueOf(calendar.getTimeInMillis());
 
         if (title.trim().isEmpty() || time.equals("time") || time.equals("date") ) {
-            Toast.makeText(this, "Insert a title, time, and date", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Insert time and date", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -217,6 +240,14 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
 
         setResult(RESULT_OK, data);
         finish();
+
+        if (state.equals("1")) {
+            startAlarm(calendar);
+        }
+
+        else {
+            cancelAlarm();
+        }
 
     }
 
@@ -271,8 +302,6 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
 
-       // updateTimeText(calendar);
-        startAlarm(calendar);
     }
 
 
@@ -303,7 +332,6 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
 
         alarmManager.cancel(pendingIntent);
-
         state = "0";
 
     }
@@ -313,22 +341,20 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
     private void alarmButtonOn(Button button_on, Button button_off) {
         button_on.setBackgroundColor(Color.CYAN);
         button_off.setBackgroundColor(Color.WHITE);
-        //startAlarm(calendar);
-        //state = "1";
+     //   buttonAlarmStop.setVisibility(View.VISIBLE);
     }
 
     private void alarmButtonOff(Button button_on, Button button_off) {
         button_on.setBackgroundColor(Color.WHITE);
         button_off.setBackgroundColor(Color.CYAN);
-        //cancelAlarm();
-        //state = "0";
+     //   buttonAlarmStop.setVisibility(View.GONE);
     }
 
     private void alarmOn(Button button_on, Button button_off) {
        // button_on.setBackgroundColor(Color.CYAN);
        // button_off.setBackgroundColor(Color.WHITE);
         alarmButtonOn(button_on, button_off);
-        startAlarm(calendar);
+     //  buttonAlarmStop.setVisibility(View.VISIBLE);
         state = "1";
     }
 
@@ -336,9 +362,16 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
        // button_on.setBackgroundColor(Color.WHITE);
        // button_off.setBackgroundColor(Color.CYAN);
         alarmButtonOff(button_on, button_off);
-        cancelAlarm();
+      //  buttonAlarmStop.setVisibility(View.GONE);
         state = "0";
     }
+
+
+
+
+
+
+
 
 
 

@@ -18,7 +18,6 @@ public class RingtoneService extends Service {
     MediaPlayer ringtone;
 
 
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -28,12 +27,27 @@ public class RingtoneService extends Service {
 
         @Override
         public int onStartCommand(Intent intent, int flags, int startId) {
-            //Log.i("LocalService", "Received start id " + startId + ": " + intent);
+            Log.i("LocalService", "Received start id " + startId + ": " + intent);
 
-            // creates instance of media player and starts the ringtone
-            ringtone = MediaPlayer.create(this, R.raw.alarm_default);
-            ringtone.setLooping(true); // repeats forever
-            ringtone.start();
+            // Retrieve extra from intent
+
+            String state = intent.getExtras().getString("EXTRA_ON/OFF");
+
+            if (state.equals("off")) {
+                ringtone.stop();
+                ringtone.reset();
+                Toast.makeText(this, "Ringtone stopped", Toast.LENGTH_SHORT).show();
+
+            }
+
+            else if (state.equals("on")){
+                // creates instance of media player and starts the ringtone
+                ringtone = MediaPlayer.create(this, R.raw.alarm_default);
+                ringtone.setLooping(true); // repeats forever
+                ringtone.start();
+
+            }
+
 
 
             return START_NOT_STICKY;

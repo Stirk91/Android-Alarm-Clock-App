@@ -26,9 +26,9 @@ public class Alarm {
         this.id = id;
     }
 
-   public void setState(String state) { this.state = state; }
+    public void setState(String state) { this.state = state; }
 
-   public void setAlarmTimeInMilli(String alarmTimeInMilli) {this.alarmTimeInMilli = alarmTimeInMilli; }
+    public void setAlarmTimeInMilli(String alarmTimeInMilli) {this.alarmTimeInMilli = alarmTimeInMilli; }
 
     public int getId() {
         return id;

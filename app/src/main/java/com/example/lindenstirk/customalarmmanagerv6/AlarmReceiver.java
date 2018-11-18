@@ -24,10 +24,22 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         alarmTitle = receivedIntent.getExtras().getString("alarm_title");
 
+        // Retrieve extras from intent
+        String extra = receivedIntent.getExtras().getString("EXTRA_ON/OFF");
 
-        showNotification(context);
+        if (extra == null) {
+            extra = "on";
+
+            // Notification (show only if on)
+            showNotification(context);
+        }
+
+
+
+
 
         Intent serviceIntent = new Intent(context, RingtoneService.class);
+        serviceIntent.putExtra("EXTRA_ON/OFF", extra);
         context.startService(serviceIntent);
 
     }

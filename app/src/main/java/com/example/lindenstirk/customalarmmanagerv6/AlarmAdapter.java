@@ -56,7 +56,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
         if (currentAlarm.getState().equals("0"))
             alarmOff(holder.alarmIconRingingBlack, holder.alarmIconRingingRed, holder.alarmIconSet, holder.alarmIconOff);
 
-        /*
+
         else if ( (currentTime > alarmTimeInMilli) || (currentAlarm.getState().equals("2")) ) {
             alarmRinging(holder.alarmIconRingingBlack, holder.alarmIconRingingRed, holder.alarmIconSet, holder.alarmIconOff);
             currentAlarm.setState("2");
@@ -66,7 +66,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
             alarmSet(holder.alarmIconRingingBlack, holder.alarmIconRingingRed, holder.alarmIconSet, holder.alarmIconOff);
             currentAlarm.setState("1");
         }
-*/
+
 
     }
 
