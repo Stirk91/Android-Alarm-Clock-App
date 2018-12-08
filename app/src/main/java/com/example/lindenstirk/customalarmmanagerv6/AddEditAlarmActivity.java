@@ -112,6 +112,7 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
 
 
 
+
         // Time Picker Fragment
         Button buttonSetTime = findViewById(R.id.button_set_time);
         buttonSetTime.setOnClickListener(new View.OnClickListener() {
@@ -138,9 +139,10 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         // TODO button for the user to select days of the week for a repeating alarm
 
 
-        // Alarm On / Off
+        // Alarm On / Off / Snooze
         final Button buttonAlarmOn = findViewById(R.id.alarm_on);
         final Button buttonAlarmOff = findViewById(R.id.alarm_off);
+        final Button buttonSnooze = findViewById(R.id.button_snooze);
         buttonAlarmStop = findViewById(R.id.alarm_stop);
 
 
@@ -150,15 +152,18 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         if (state.equals("1")) {
             alarmButtonOn(buttonAlarmOn, buttonAlarmOff);
             buttonAlarmStop.setVisibility(View.VISIBLE);
+            buttonSnooze.setVisibility(View.GONE);
         }
 
         else if (state.equals("0")) {
             alarmButtonOff(buttonAlarmOn, buttonAlarmOff);
             buttonAlarmStop.setVisibility(View.GONE);
+            buttonSnooze.setVisibility(View.GONE);
         }
 
         else if (state.equals("2")) {
             alarmButtonOn(buttonAlarmOn, buttonAlarmOff);
+            buttonSnooze.setVisibility(View.VISIBLE);
             buttonAlarmStop.setVisibility(View.VISIBLE);
         }
 
@@ -167,6 +172,7 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         }
 
 
+        final Intent stopAlarmIntent = new Intent(this, AlarmReceiver.class);
 
 
         // Alarm On
@@ -186,15 +192,15 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
         });
 
 
-        final Intent stopAlarmIntent = new Intent(this, AlarmReceiver.class);
-        stopAlarmIntent.putExtra("EXTRA_ON/OFF", "off");
 
-
+        // Alarm Stop
         buttonAlarmStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 state = "0";
                 textViewState.setText("State: " + state);
+
+                stopAlarmIntent.putExtra("EXTRA_ON/OFF", "off");
 
                 // stop ringtone
                 sendBroadcast(stopAlarmIntent);
@@ -202,7 +208,30 @@ public class AddEditAlarmActivity extends AppCompatActivity implements TimePicke
             }
         });
 
+        // Alarm Snooze
+
+        buttonSnooze.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+            state = "1";
+
+                stopAlarmIntent.putExtra("EXTRA_ON/OFF", "snooze");
+
+                // stop ringtone
+                sendBroadcast(stopAlarmIntent);
+
+            Calendar calendarSnooze = Calendar.getInstance();
+            calendarSnooze.setTimeInMillis(calendarSnooze.getTimeInMillis() + 1 * 60000); // one minute times minutes in milliseconds
+            startAlarm(calendarSnooze);
+
+            }
+        });
+
+
     }
+
+
 
 
 
